@@ -89,13 +89,12 @@ def recommend_sell_put(symbol: str, current_price: float) -> str:
 
 def get_real_time_price(symbol: str) -> float:
     try:
-        url = f"https://hq.sinajs.cn/list=gb_{symbol.lower()}"
+        api_key = "daa15a0f598e4d1595e255110a357ede"  # 这里替换成你自己的 TwelveData API Key
+        url = f"https://api.twelvedata.com/price?symbol={symbol}&apikey={api_key}"
         response = requests.get(url)
-        response.encoding = 'gbk'
-        data = response.text
-        parts = data.split(',')
-        if len(parts) > 1 and parts[1]:
-            return float(parts[1])
+        data = response.json()
+        if 'price' in data:
+            return float(data['price'])
         else:
             return None
     except Exception:
